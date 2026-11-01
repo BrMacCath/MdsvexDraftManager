@@ -279,8 +279,6 @@ suite('First Draft Create function checks',()=>{
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
         const newDraft = createDraft(origContent);
-        console.log(newDraft);
-        console.log(newDraftNoTopicWithComments);
        assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
             newDraftNoTopicWithComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
@@ -325,6 +323,7 @@ suite('First Draft Create function checks',()=>{
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
+        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
