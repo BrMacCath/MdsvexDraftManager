@@ -7371,7 +7371,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode5 = __toESM(require("vscode"));
+var vscode6 = __toESM(require("vscode"));
 
 // src/functions/frontmatter/updateFrontmatter.ts
 var vscode = __toESM(require("vscode"));
@@ -7420,8 +7420,8 @@ function stringifyNumber(n) {
   return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
 }
 
-// src/functions/drafts/createDraftTitle.ts
-function createDraftTitle(draftNum) {
+// src/functions/drafts/createCompleteDraftTitle.ts
+function createCompleteDraftTitle(draftNum) {
   return "## Complete " + stringifyNumber(draftNum) + " Draft";
 }
 
@@ -7444,7 +7444,7 @@ function updateFrontmatter() {
     return ["", 0];
   }
   ydoc.set(draftNumIndicator, draftNum + 1);
-  ydoc.set(completeSectionIndicator, createDraftTitle(draftNum));
+  ydoc.set(completeSectionIndicator, createCompleteDraftTitle(draftNum));
   const fm = ydoc.toString().trimEnd();
   const eol = doc.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n";
   const replacement = fm ? `---${eol}${fm}${eol}---` : "";
@@ -7452,9 +7452,13 @@ function updateFrontmatter() {
 }
 
 // src/functions/paragraphs/splitParagraphsFrontMatter.ts
-function splitParagraphsFrontMatter(paragraphs, rewriteLineSignifier, topicFrontMatterSeparator) {
+var vscode2 = __toESM(require("vscode"));
+function splitParagraphsFrontMatter(paragraphs) {
+  const config = vscode2.workspace.getConfiguration("myExtension");
+  const topicFrontMatterSeparator = config.get("draftStyle.topicFrontmatterSeparator", "*---*");
+  const rewriteLineSignifier = config.get("draftStyle.rewriteLineSignifier", ">");
   let splitParagraph = [];
-  paragraphs.filter((t) => t.length === 2).forEach((paragraph) => {
+  paragraphs.forEach((paragraph) => {
     const temp = paragraph.split(topicFrontMatterSeparator);
     const paraContent = temp[1].split("\n").filter((t) => {
       return t[0] === rewriteLineSignifier;
@@ -7481,24 +7485,27 @@ function splitParagraphsNoFrontMatter(paragraphs, rewriteLineSignifier) {
 }
 
 // src/functions/drafts/createFromDraft.ts
-var vscode2 = __toESM(require("vscode"));
-function createFromDraft(draft, oldDraftNum) {
-  const config = vscode2.workspace.getConfiguration("myExtension");
+var vscode3 = __toESM(require("vscode"));
+function createFromDraft(draft, draftNum) {
+  const config = vscode3.workspace.getConfiguration("myExtension");
   const paragraphSeparator = config.get("draftStyle.paragraphSeparator", "+---+");
   const topicFrontMatterSeparator = config.get("draftStyle.topicFrontmatterSeparator", "*---*");
   const haveTopicFrontMatter = config.get("draftStyle.haveTopicFrontmatterSeparator", true);
   const rewriteLineSignifier = config.get("draftStyle.rewriteLineSignifier", ">");
   const commentLineSignifier = config.get("draftStyle.commentSignifier");
-  const newLineSeperator = "\n" + commentLineSignifier + " \n" + rewriteLineSignifier + " \n\n";
-  const currentDraftTitle = createDraftTitle(oldDraftNum);
+  const haveCommentLine = config.get("draftStyle.haveLineComments", true);
+  const newLineSeperator = haveCommentLine ? "\n" + commentLineSignifier + " \n" + rewriteLineSignifier + " \n\n" : "\n" + rewriteLineSignifier + " \n\n";
+  const currentDraftTitle = "# " + stringifyNumber(draftNum) + " Draft";
   const contentIndex = draft.indexOf(currentDraftTitle) + currentDraftTitle.length;
   const contentDraft = draft.slice(contentIndex);
-  let paragraphs = contentDraft.split(paragraphSeparator);
+  let paragraphs = contentDraft.split(paragraphSeparator).filter((t) => {
+    return t.trim() !== "";
+  });
   let splitParagraph = [];
   if (!haveTopicFrontMatter) {
     splitParagraph = splitParagraphsNoFrontMatter(paragraphs, rewriteLineSignifier);
   } else {
-    splitParagraph = splitParagraphsFrontMatter(paragraphs, rewriteLineSignifier, topicFrontMatterSeparator);
+    splitParagraph = splitParagraphsFrontMatter(paragraphs);
   }
   let completeDraft = [];
   let newDraft = [];
@@ -7523,17 +7530,17 @@ function createFromDraft(draft, oldDraftNum) {
   let newContent = "";
   newContent += `
 
-## Complete ${stringifyNumber(oldDraftNum)} Draft
+## Complete ${stringifyNumber(draftNum)} Draft
 
 ` + completeDraft.join("\n\n") + "\n\n";
-  newContent += `# ${stringifyNumber(oldDraftNum + 1)} Draft
+  newContent += `# ${stringifyNumber(draftNum + 1)} Draft
 
 ` + newDraft.join(paragraphSeparator + "\n");
-  return newContent;
+  return draft + newContent;
 }
 
 // src/functions/drafts/createFromFirstDraft.ts
-var vscode3 = __toESM(require("vscode"));
+var vscode4 = __toESM(require("vscode"));
 
 // src/constants/frontMatterConstants.ts
 var frontMatterIndicator = "---";
@@ -7541,14 +7548,15 @@ var frontMatterEndIndicator = "\n---\n";
 
 // src/functions/drafts/createFromFirstDraft.ts
 function createFromFirstDraft(draft) {
-  const config = vscode3.workspace.getConfiguration("myExtension");
+  const config = vscode4.workspace.getConfiguration("myExtension");
   const paragraphSeparator = config.get("draftStyle.paragraphSeparator", "+---+");
   const topicFrontMatterSeparator = config.get("draftStyle.topicFrontmatterSeparator", "*---*");
   const haveTopicFrontMatter = config.get("draftStyle.haveTopicFrontmatterSeparator", true);
   const rewriteLineSignifier = config.get("draftStyle.rewriteLineSignifier", ">");
+  const haveCommentLine = config.get("draftStyle.haveLineComments", true);
   const commentLineSignifier = config.get("draftStyle.commentSignifier");
   const firstParagraphSeparator = "\n";
-  const newLineSeperator = "\n" + commentLineSignifier + " \n" + rewriteLineSignifier + " \n\n";
+  const newLineSeperator = haveCommentLine ? "\n" + commentLineSignifier + " \n" + rewriteLineSignifier + " \n\n" : "\n" + rewriteLineSignifier + " \n\n";
   if (draft.slice(0, 3) === frontMatterIndicator) {
     draft = draft.slice(3);
     const frontmatterIndex = draft.indexOf(frontMatterIndicator);
@@ -7576,9 +7584,9 @@ function createFromFirstDraft(draft) {
   if (!haveTopicFrontMatter) {
     splitParagraph.forEach((content) => {
       const sentences = content[1].filter((t) => {
-        t.trim() !== "";
+        return t.trim() !== "";
       });
-      newDraft.push(sentences.join(newLineSeperator) + newLineSeperator);
+      newDraft.push("\n" + sentences.join(newLineSeperator) + newLineSeperator);
     });
   } else {
     splitParagraph.forEach((content) => {
@@ -7597,22 +7605,21 @@ function createFromFirstDraft(draft) {
 }
 
 // src/functions/drafts/splitContent.ts
-var vscode4 = __toESM(require("vscode"));
+var vscode5 = __toESM(require("vscode"));
 function splitContent(text) {
   const startFile = text.slice(0, 3);
   if (frontMatterIndicator !== startFile) {
-    vscode4.window.showInformationMessage("Front matter is missing");
+    vscode5.window.showInformationMessage("Front matter is missing");
     return ["", ""];
   }
+  text = text.slice(3);
   const frontMatterEndIndex = text.indexOf(frontMatterEndIndicator);
-  if (frontMatterEndIndex !== -1) {
-    vscode4.window.showInformationMessage("Front matter ending is missing");
+  if (frontMatterEndIndex === -1) {
+    vscode5.window.showInformationMessage("Front matter ending is missing");
     return ["", ""];
   }
   const frontMatter = text.slice(0, frontMatterEndIndex).trim();
-  let content = text.slice(frontMatterEndIndex + frontMatterEndIndicator.length).trim();
-  const endFrontIndex = content.indexOf(frontMatterIndicator) + frontMatterIndicator.length;
-  content = content.slice(endFrontIndex).trim();
+  const content = text.slice(frontMatterEndIndex + frontMatterEndIndicator.length).trim();
   return [frontMatter, content];
 }
 
@@ -7627,19 +7634,19 @@ function createDraft(fileText) {
 
 // src/extension.ts
 function activate(context) {
-  const updateDraftCommand = vscode5.commands.registerCommand("markdown-draft-manager.updateMarkdownDraft", async () => {
-    const editor = vscode5.window.activeTextEditor;
+  const updateDraftCommand = vscode6.commands.registerCommand("markdown-draft-manager.updateMarkdownDraft", async () => {
+    const editor = vscode6.window.activeTextEditor;
     if (!editor) {
-      vscode5.window.showWarningMessage("No file is currently open.");
+      vscode6.window.showWarningMessage("No file is currently open.");
       return;
     }
     const document = editor.document;
     if (document.languageId !== "markdown") {
-      vscode5.window.showInformationMessage("The current file is not markdown.");
+      vscode6.window.showInformationMessage("The current file is not markdown.");
       return;
     }
     const newDraft = createDraft(document.getText());
-    const fullRange = new vscode5.Range(
+    const fullRange = new vscode6.Range(
       document.positionAt(0),
       document.positionAt(document.getText().length)
     );
@@ -7647,7 +7654,7 @@ function activate(context) {
       editBuilder.replace(fullRange, newDraft);
     });
     if (!success) {
-      vscode5.window.showErrorMessage("Failed to edit the document.");
+      vscode6.window.showErrorMessage("Failed to edit the document.");
     }
   });
   context.subscriptions.push(updateDraftCommand);
