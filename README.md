@@ -1,8 +1,8 @@
 # markdown-draft-manager README
 
 
-[![Test](https://github.com/BrMacCath/MarkdownDraftManager/actions/workflows/tests.yml/badge.svg)](https://github.com/BrMacCath/MarkdownDraftManager/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/BrMacCath/MarkdownDraftManager/graph/badge.svg?token=RBFNGESDQ5)](https://codecov.io/gh/BrMacCath/MarkdownDraftManager)
+[![Test](https://github.com/BrMacCath/MdsvexMarkdownDraftManager/actions/workflows/tests.yml/badge.svg)](https://github.com/BrMacCath/MdsvexMarkdownDraftManager/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/BrMacCath/MdsvexMarkdownDraftManager/graph/badge.svg?token=RBFNGESDQ5)](https://codecov.io/gh/BrMacCath/MdsvexMarkdownDraftManager)
 
 
 ## Features
