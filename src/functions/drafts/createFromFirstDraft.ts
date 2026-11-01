@@ -51,11 +51,7 @@ export function createFromFirstDraft(draft:string){
     // Make new draft based on the topic front matter.
     if(!haveTopicFrontMatter){
         splitParagraph.forEach((content)=>{
-            console.log("content")
-            console.log(content[1].join("   "));
             const sentences = content[1].filter((t) =>{return t.trim()!=="";});
-            console.log("sentences")
-            console.log(sentences.join(" " ));
             newDraft.push("\n" + sentences.join(newLineSeperator)+newLineSeperator );
         });
     }
