@@ -4,8 +4,8 @@ import { stringifyNumber } from "../functions/drafts/stringifyNumber";
 
 suite("stringifyNumber", () => {
   test("numbers below 20 use the special table", () => {
-    assert.strictEqual(stringifyNumber(1), "first");
-    assert.strictEqual(stringifyNumber(19), "nineteenth");
+    assert.strictEqual(stringifyNumber(1), "First");
+    assert.strictEqual(stringifyNumber(19), "Nineteenth");
   });
 
   test("round tens", () => {
@@ -14,7 +14,7 @@ suite("stringifyNumber", () => {
   });
 
   test("compound numbers", () => {
-    assert.strictEqual(stringifyNumber(21), "twenty-first");
-    assert.strictEqual(stringifyNumber(99), "ninety-ninth");
+    assert.strictEqual(stringifyNumber(21), "twenty-First");
+    assert.strictEqual(stringifyNumber(99), "ninety-Ninth");
   });
 });
