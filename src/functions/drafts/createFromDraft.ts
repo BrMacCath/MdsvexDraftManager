@@ -11,8 +11,11 @@ export function createFromDraft(draft:string,draftNum:number){
     const haveTopicFrontMatter = config.get<boolean>("draftStyle.haveTopicFrontmatterSeparator",true);
     const rewriteLineSignifier = config.get<string>("draftStyle.rewriteLineSignifier",">");
     const commentLineSignifier =  config.get<string>("draftStyle.commentSignifier");
-
-    const newLineSeperator = "\n"+commentLineSignifier + " \n" + rewriteLineSignifier +" \n\n";
+    const haveCommentLine = config.get<boolean>("draftStyle.haveLineComments",true);
+    const newLineSeperator = haveCommentLine? 
+            "\n"+commentLineSignifier + " \n" + rewriteLineSignifier +" \n\n"
+            :"\n"+ rewriteLineSignifier +" \n\n";
+    
     // Select the content from the current draft.
     const currentDraftTitle = "# " + stringifyNumber(draftNum) +" Draft";
     const contentIndex = draft.indexOf(currentDraftTitle) + currentDraftTitle.length;
