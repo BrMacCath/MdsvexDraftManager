@@ -22,7 +22,7 @@ export function updateFrontmatter():[string,number]{
         ydoc.set(completeSectionIndicator, createCompleteDraftTitle(draftNum));
         const fm = ydoc.toString().trimEnd();
         const eol = doc.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n";
-        const replacement = fm ? `---${eol}${fm}${eol}---` : "";
+        const replacement = `---${eol}${fm}${eol}---`;
     
         return [replacement,draftNum];
 }
