@@ -3,6 +3,9 @@ import * as assert from 'assert';
 import * as sinon from 'sinon';
 
 suite('Update Markdown commands tests',async()=>{
+    afterEach(async () => {
+    await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+    });
     test('no active editor shows a warning', async () => {
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
     const warn = sinon.stub(vscode.window, 'showWarningMessage');
