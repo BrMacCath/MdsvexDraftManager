@@ -62,6 +62,44 @@ I need a second paragraph to test things out
 * 
 > 
 `;
+
+const newDraftNoFrontmatterWithTopicWithComments= String.raw`# First Draft
+
+This is the content for the first draft. We will see how it works out.
+
+I need a second paragraph to test things out. This will check the paragraph separating condition.
+
+## Complete First Draft
+
+This is the content for the first draft. We will see how it works out.
+
+I need a second paragraph to test things out. This will check the paragraph separating condition.
+
+# Second Draft
+
++---+
+
+*---*
+This is the content for the first draft
+* 
+> 
+
+ We will see how it works out
+* 
+> 
+
++---+
+
+*---*
+I need a second paragraph to test things out
+* 
+> 
+
+ This will check the paragraph separating condition
+* 
+> 
+`;
+
 const newDraftWithTopicNoComments= String.raw`---
 draftNum: 2
 completeSection: "## Complete First Draft"
@@ -235,7 +273,7 @@ suite('First Draft Create function checks',()=>{
         const newDraft = createFromFirstDraft(origContent);
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
-            newDraftWithTopicWithComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
+            newDraftNoFrontmatterWithTopicWithComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
         );
     });
 
