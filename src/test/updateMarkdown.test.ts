@@ -16,20 +16,20 @@ suite('Update Markdown commands tests',async()=>{
     });
     
     test('A non markdown language shows a warning', async () => {
-    await vscode.commands.executeCommand('workbench.action.closeAllEditors');
-    const doc = await vscode.workspace.openTextDocument({
-        language: 'plaintext',
-        content: '---\ndraftNum: 1\ntestProperty: here\n---\nBody text',
-    });
-    await vscode.window.showTextDocument(doc);
-    assert.strictEqual(vscode.window.activeTextEditor?.document.languageId, 'plaintext');
-    const warn = sinon.stub(vscode.window, 'showWarningMessage');
-    try {
-        const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
-        assert.strictEqual(result, undefined);
-        assert.ok(warn.calledOnceWith('The current file is not markdown.'));
-    } finally {
-        warn.restore();
-    }
+        await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'plaintext',
+            content: '---\ndraftNum: 1\ntestProperty: here\n---\nBody text',
+        });
+        await vscode.window.showTextDocument(doc);
+        assert.strictEqual(vscode.window.activeTextEditor?.document.languageId, 'plaintext');
+        const info = sinon.stub(vscode.window, 'showInformationMessage');
+        try {
+            const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
+            assert.strictEqual(result, undefined);
+            assert.ok(info.calledOnceWith('The current file is not markdown.'));
+        } finally {
+            info.restore();
+        }
     });
 });
