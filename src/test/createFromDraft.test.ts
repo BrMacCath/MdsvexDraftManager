@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as assert from 'assert';
 import { updateFrontmatter } from '../functions/frontmatter/updateFrontmatter';
 import createDraft from '../functions/drafts/createDraft';
+import { createFromDraft } from '../functions/drafts/createFromDraft';
 
 const origContent =String.raw`---
 draftNum: 2
@@ -327,7 +328,7 @@ suite('Create draft function checks',()=>{
         });
     
     
-        test("Check create from Draft will make a new draft. Have Topic Frontmatter, no comments",async()=>{
+        test("Check create Draft will make a new draft. Have Topic Frontmatter, no comments",async()=>{
             const doc = await vscode.workspace.openTextDocument({
                 language: 'markdown',
                 content: '---\ndraftNum: 2\n---',
@@ -336,6 +337,21 @@ suite('Create draft function checks',()=>{
             await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
             await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
             const newDraft = createDraft(origContent);
+            assert.deepStrictEqual(
+                newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
+                newDraftWithTopicNoComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
+            );
+        });
+
+        test("Check create from Draft will make a new draft. Have Topic Frontmatter, no comments",async()=>{
+            const doc = await vscode.workspace.openTextDocument({
+                language: 'markdown',
+                content: '---\ndraftNum: 2\n---',
+            });
+            await vscode.window.showTextDocument(doc);
+            await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
+            await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
+            const newDraft = createFromDraft(origContent,2);
             assert.deepStrictEqual(
                 newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
                 newDraftWithTopicNoComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})

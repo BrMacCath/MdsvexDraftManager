@@ -10,6 +10,7 @@ import * as assert from 'assert';
 import { updateFrontmatter } from '../functions/frontmatter/updateFrontmatter';
 import * as vscode from 'vscode';
 import createDraft from '../functions/drafts/createDraft';
+import { createFromFirstDraft } from '../functions/drafts/createFromFirstDraft';
 
 const origContent =String.raw`---
 draftNum: 1
@@ -217,6 +218,21 @@ suite('First Draft Create function checks',()=>{
         await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
         const newDraft = createDraft(origContent);
+        assert.deepStrictEqual(
+            newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
+            newDraftWithTopicWithComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
+        );
+    });
+
+    test("Check create from First Draft will make a new draft. Have Topic Frontmatter, have comments",async()=>{
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ndraftNum: 1\n---',
+        });
+        await vscode.window.showTextDocument(doc);
+        await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
+        await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
+        const newDraft = createFromFirstDraft(origContent);
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
             newDraftWithTopicWithComments.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";})
