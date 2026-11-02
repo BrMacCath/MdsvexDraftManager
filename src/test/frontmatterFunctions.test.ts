@@ -62,7 +62,33 @@ suite('Test frontmatter functions',() =>{
 
         assert.deepStrictEqual(updateFrontmatter(), ['', 0]);
     });
-    
+    test('empty markdown editor returns ["", 0]', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '',
+        });
+        await vscode.window.showTextDocument(doc);
+
+        assert.deepStrictEqual(updateFrontmatter(), ['', 0]);
+    });
+
+    test('uses CRLF when the document uses CRLF', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ndraftNum: 1\n---\nBody',
+        });
+        const editor = await vscode.window.showTextDocument(doc);
+        await editor.edit((eb) => eb.setEndOfLine(vscode.EndOfLine.CRLF));
+
+        assert.strictEqual(doc.eol, vscode.EndOfLine.CRLF);
+
+        const [frontMatter, oldDraftNum] = updateFrontmatter();
+        assert.strictEqual(oldDraftNum, 1);
+        assert.ok(frontMatter.includes('\r\n'));
+        assert.ok(frontMatter.startsWith('---\r\n'));
+        assert.ok(frontMatter.endsWith('\r\n---'));
+    });
+
     test('editor with frontmatter but no draftNum returns ["", 0]', async () => {
         const doc = await vscode.workspace.openTextDocument({
             language: 'markdown',
