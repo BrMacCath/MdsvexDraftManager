@@ -230,7 +230,7 @@ suite('First Draft Create function checks',()=>{
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
@@ -262,7 +262,7 @@ suite('First Draft Create function checks',()=>{
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
@@ -293,7 +293,7 @@ suite('First Draft Create function checks',()=>{
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
        assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
@@ -323,7 +323,7 @@ suite('First Draft Create function checks',()=>{
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(
             newDraft.trim().split('\n').map((t)=>{return t.trim();}).filter((t)=>{return t!== "";}),
