@@ -5,7 +5,7 @@ import { createCompleteDraftTitle } from '../drafts/createCompleteDraftTitle';
 
 // Strip --- above and below.
 export function updateFrontmatter():[string,number]{
-    const editor = vscode.window.activeTextEditor;
+        const editor = vscode.window.activeTextEditor;
         if (!editor || editor.document.languageId !== "markdown") {return ["",0];}
         const doc = editor.document;
         const m = doc.getText().match(/^---\r?\n([\s\S]*?)\r?\n---(?=\r?\n|$)/);
