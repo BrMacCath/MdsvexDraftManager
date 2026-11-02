@@ -53,9 +53,9 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!success) {
 			vscode.window.showErrorMessage('Failed to edit the document.');
 		}
+		
 	});
-
-	// This command will take a draft mdsvex file and fill in portions from other markdown files.
+		// This command will take a draft mdsvex file and fill in portions from other markdown files.
 
 	const fillInMdSvex = vscode.commands.registerCommand('mdsvex-markdown-draft-manager.editMdsvex', async () => {
 
@@ -74,34 +74,34 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-	if (!editor) { return; }
+		if (!editor) { return; }
 
-	const text = document.getText();
-	const regex = /\{\{\s*([\w./-]+)\s*\}\}/g;
+		const text = document.getText();
+		const regex = /\{\{\s*([\w./-]+)\s*\}\}/g;
 
-	// Folder containing the current file
-	const dir = vscode.Uri.joinPath(document.uri, '..');
-	const outputUri = vscode.Uri.joinPath(dir, OUTPUT_NAME);
-	const matches = [...text.matchAll(regex)];
+		// Folder containing the current file
+		const dir = vscode.Uri.joinPath(document.uri, '..');
+		const outputUri = vscode.Uri.joinPath(dir, OUTPUT_NAME);
+		const matches = [...text.matchAll(regex)];
 
-	// Read each unique file once
-	const uniqueNames = [...new Set(matches.map(m => m[1]))];
-	const contents = new Map<string, string | undefined>();
-	await Promise.all(
-		uniqueNames.map(async name => contents.set(name, await readSibling(dir, name)))
-	);
+		// Read each unique file once
+		const uniqueNames = [...new Set(matches.map(m => m[1]))];
+		const contents = new Map<string, string | undefined>();
+		await Promise.all(
+			uniqueNames.map(async name => contents.set(name, await readSibling(dir, name)))
+		);
 
-	const missing: string[] = [];
-  	const result = text.replace(regex, (full, name) => {
-    const replacement = contents.get(name);
-    if (replacement === undefined) {
-      missing.push(name);
-      return full;
-    }
-    return replacement;
-  	});
+		const missing: string[] = [];
+		const result = text.replace(regex, (full, name) => {
+		const replacement = contents.get(name);
+		if (replacement === undefined) {
+			missing.push(name);
+			return full;
+		}
+		return replacement;
+		});
 
-	await vscode.workspace.fs.writeFile(outputUri, new TextEncoder().encode(result));
+		await vscode.workspace.fs.writeFile(outputUri, new TextEncoder().encode(result));
 
 		
 	});
