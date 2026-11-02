@@ -7,7 +7,7 @@ import * as path from 'path';
 const COMMAND = 'mdsvex-markdown-draft-manager.editMdsvex'; // your command id
 const OUTPUT_NAME = '+page.svx';
 
-suite('inlineIncludes command', () => {
+suite('Edit mdsvex command', () => {
   let dir: string;
 
   const write = (name: string, content: string) =>
