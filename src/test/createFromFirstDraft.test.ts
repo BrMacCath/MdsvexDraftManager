@@ -191,6 +191,7 @@ suite('First Draft Create function checks',()=>{
             .update(keyHaveTopicFrontmatter, originalHaveTopicFrontmatter, vscode.ConfigurationTarget.Global);
         await config
             .update(keyHaveComments, originalHaveComments, vscode.ConfigurationTarget.Global);
+        await vscode.commands.executeCommand('workbench.action.closeAllEditors');
     });
     
 
