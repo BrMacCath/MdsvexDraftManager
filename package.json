@@ -14,8 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "markdown-draft-manager.updateMarkdownDraft",
+        "command": "mdsvex-markdown-draft-manager.updateMarkdownDraft",
         "title": "Update Markdown Draft"
+      },
+      {
+        "command": "mdsvex-markdown-draft-manager.editMdsvex",
+        "title": "Edit Mdsvex Draft"
       }
     ],
     "configuration": [
