@@ -22,6 +22,7 @@ suite('Update Markdown commands tests',async()=>{
         content: '---\ndraftNum: 1\ntestProperty: here\n---\nBody text',
     });
     await vscode.window.showTextDocument(doc);
+    assert.strictEqual(vscode.window.activeTextEditor?.document.languageId, 'plaintext');
     const warn = sinon.stub(vscode.window, 'showWarningMessage');
     try {
         const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
