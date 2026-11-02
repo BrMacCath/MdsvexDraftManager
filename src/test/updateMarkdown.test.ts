@@ -18,9 +18,10 @@ suite('Update Markdown commands tests',async()=>{
     test('A non markdown language shows a warning', async () => {
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
     const doc = await vscode.workspace.openTextDocument({
-                language: 'plaintxt',
-                content: '---\ndraftNum: 1\ntestProperty: here\n---\nBody text',
-            });
+        language: 'plaintext',
+        content: '---\ndraftNum: 1\ntestProperty: here\n---\nBody text',
+    });
+    await vscode.window.showTextDocument(doc);
     const warn = sinon.stub(vscode.window, 'showWarningMessage');
     try {
         const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
