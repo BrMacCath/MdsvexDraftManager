@@ -1,3 +1,4 @@
+import { frontMatterIndicator } from "../../constants/frontMatterConstants";
 import { splitParagraphsFrontMatter } from "../paragraphs/splitParagraphsFrontMatter";
 import { splitParagraphsNoFrontMatter } from "../paragraphs/splitParagraphsNoFrontMatter";
 import { stringifyNumber } from "./stringifyNumber";
@@ -15,6 +16,13 @@ export function createFromDraft(draft:string,draftNum:number){
     const newLineSeperator = haveCommentLine? 
             "\n"+commentLineSignifier + " \n" + rewriteLineSignifier +" \n\n"
             :"\n"+ rewriteLineSignifier +" \n\n";
+
+    // Remove frontmatter
+    if(draft.slice(0,3) === frontMatterIndicator){
+        draft = draft.slice(3);
+        const frontmatterIndex = draft.indexOf(frontMatterIndicator);
+        draft = draft.slice(frontmatterIndex + frontMatterIndicator.length);
+    }
     
     // Select the content from the current draft.
     const currentDraftTitle = "# " + stringifyNumber(draftNum) +" Draft";
