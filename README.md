@@ -1,33 +1,31 @@
-# markdown-draft-manager README
+# Mdsvex Draft Manager README
 
+[![Test](https://github.com/BrMacCath/MdsvexDraftManager/actions/workflows/tests.yml/badge.svg)](https://github.com/BrMacCath/MdsvexDraftManager/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/BrMacCath/MdsvexDraftManager/graph/badge.svg?token=RBFNGESDQ5)](https://codecov.io/gh/BrMacCath/MdsvexDraftManager)
 
-[![Test](https://github.com/BrMacCath/MdsvexMarkdownDraftManager/actions/workflows/tests.yml/badge.svg)](https://github.com/BrMacCath/MdsvexMarkdownDraftManager/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/BrMacCath/MdsvexMarkdownDraftManager/graph/badge.svg?token=RBFNGESDQ5)](https://codecov.io/gh/BrMacCath/MdsvexMarkdownDraftManager)
+## Purpose
 
+The point of this app is to be able to make drafts in markdown files and then transfer over what you wish into a mdsvex file semi automatically. This combines the practicalilty of markdown with the forrmat of mdsvex for sveltekit applications.
 
-## Features
-New drafts
-## Extension Settings
+# Features
+Currently this app has two commands for people to use, update markdown and use mdsvex template.
 
-Go through the extension configuration settings
+## Update Markdown
 
-### 1.0.0
+This will take a draft you have written according to your settings, remove comments, reformat it and then form a complete version of that draft while setting up a new draft.
 
-Initial release of ...
+## Use mdsvex template
 
-### 1.0.1
+Create a template file for your mdsvex file with places to put in pieces of complete markdown file. This command will then take this template, fill in the sections and out the output in the same folder but the file will be +page.svx.
 
-Fixed issue #.
+# Extension Settings
 
-### 1.1.0
+## Frontmatter Settings
 
-Added features X, Y, and Z.
+## Draft Settings
 
----
+# Releases
 
-## Following extension guidelines
+## 1.0.0
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
