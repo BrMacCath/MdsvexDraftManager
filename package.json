@@ -18,8 +18,8 @@
         "title": "Update Markdown Draft"
       },
       {
-        "command": "mdsvex-draft-manager.editMdsvex",
-        "title": "Edit Mdsvex Draft"
+        "command": "mdsvex-draft-manager.useMdsvexTemplate",
+        "title": "Use Mdsvex Template"
       }
     ],
     "configuration": [

@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 		// This command will take a draft mdsvex file and fill in portions from other markdown files.
 
-	const fillInMdSvex = vscode.commands.registerCommand('mdsvex-draft-manager.editMdsvex', async () => {
+	const fillInMdSvex = vscode.commands.registerCommand('mdsvex-draft-manager.useMdsvexTemplate', async () => {
 
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 		if (!editor) {

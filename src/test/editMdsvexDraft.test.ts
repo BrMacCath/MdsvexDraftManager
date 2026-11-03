@@ -4,10 +4,10 @@ import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
 
-const COMMAND = 'mdsvex-draft-manager.editMdsvex'; // your command id
+const COMMAND = 'mdsvex-draft-manager.useMdsvexTemplate'; // your command id
 const OUTPUT_NAME = '+page.svx';
 
-suite('Edit mdsvex command', () => {
+suite('Use Mdsvex template command', () => {
   let dir: string;
 
   const write = (name: string, content: string) =>
