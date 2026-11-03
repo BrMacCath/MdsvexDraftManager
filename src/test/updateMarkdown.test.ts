@@ -10,7 +10,7 @@ suite('Update Markdown commands tests',async()=>{
     await vscode.commands.executeCommand('workbench.action.closeAllEditors');
     const warn = sinon.stub(vscode.window, 'showWarningMessage');
     try {
-        const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
+        const result = await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
         assert.strictEqual(result, undefined);
         assert.ok(warn.calledOnceWith('No file is currently open.'));
     } finally {
@@ -28,7 +28,7 @@ suite('Update Markdown commands tests',async()=>{
         assert.strictEqual(vscode.window.activeTextEditor?.document.languageId, 'plaintext');
         const info = sinon.stub(vscode.window, 'showInformationMessage');
         try {
-            const result = await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
+            const result = await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
             assert.strictEqual(result, undefined);
             assert.ok(info.calledOnceWith('The current file is not markdown.'));
         } finally {

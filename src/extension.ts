@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Command to update a markdown file 
 	// First we ensure it is a md file and then edit with
 	// new draft from new draft function.
-	const updateDraftCommand = vscode.commands.registerCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft', async () => {
+	const updateDraftCommand = vscode.commands.registerCommand('mdsvex-draft-manager.updateMarkdownDraft', async () => {
 
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 		if (!editor) {
@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 		// This command will take a draft mdsvex file and fill in portions from other markdown files.
 
-	const fillInMdSvex = vscode.commands.registerCommand('mdsvex-markdown-draft-manager.editMdsvex', async () => {
+	const fillInMdSvex = vscode.commands.registerCommand('mdsvex-draft-manager.editMdsvex', async () => {
 
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 		if (!editor) {

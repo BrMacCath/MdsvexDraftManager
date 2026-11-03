@@ -58,7 +58,7 @@ suite('Configuration tests', () => {
     });
     await vscode.window.showTextDocument(doc);
 
-    await vscode.commands.executeCommand('mdsvex-markdown-draft-manager.updateMarkdownDraft');
+    await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
 
     assert.ok(doc.getText().includes('revision: 2'));
     });

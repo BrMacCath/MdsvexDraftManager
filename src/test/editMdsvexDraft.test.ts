@@ -4,7 +4,7 @@ import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
 
-const COMMAND = 'mdsvex-markdown-draft-manager.editMdsvex'; // your command id
+const COMMAND = 'mdsvex-draft-manager.editMdsvex'; // your command id
 const OUTPUT_NAME = '+page.svx';
 
 suite('Edit mdsvex command', () => {
