@@ -22,7 +22,41 @@ Create a template file for your mdsvex file with places to put in pieces of comp
 
 ## Frontmatter Settings
 
+### Draft Number
+
+This tells the extension what number draft you are on. Default is draftNum.
+
+
+### Complete Section
+
+This denotes the section which the use mdsvex section will take. Its default is completeSection.
+
+
 ## Draft Settings
+
+### Have Topic Frontmatter
+
+For each paragraph that you are writing, you can have space to write comments or notes to yourself. This can be turned off.
+
+### Topic frontmatter Separator
+
+How the topic fronmatter is separated from the paragraph. Its default is *---*
+
+### Paragraph Separator
+
+How each paragraph is separated from each other during drafts. Default is +---+
+
+### Have comments
+
+Decides whether each line in the new draft will have comments.
+
+### Comment line signifier
+
+How a comment line starts. Default is * .
+
+### Rewrite line signifier
+
+Indicates the rewrite of a line. Default is > .
 
 # Releases
 
