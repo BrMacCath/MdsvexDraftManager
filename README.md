@@ -2,7 +2,9 @@
 
 [![Test](https://github.com/BrMacCath/MdsvexDraftManager/actions/workflows/tests.yml/badge.svg)](https://github.com/BrMacCath/MdsvexDraftManager/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/BrMacCath/MdsvexDraftManager/graph/badge.svg?token=RBFNGESDQ5)](https://codecov.io/gh/BrMacCath/MdsvexDraftManager)
-
+[![Downloads](https://vsmarketplacebadges.dev/downloads/BrMacCath.mdsvex-draft-manager.svg)](https://marketplace.visualstudio.com/items?itemName=BrMacCath.mdsvex-draft-manager)
+[![Installs](https://vsmarketplacebadges.dev/installs/BrMacCath.mdsvex-draft-manager.svg)](https://marketplace.visualstudio.com/items?itemName=BrMacCath.mdsvex-draft-manager)
+[![Version](https://vsmarketplacebadges.dev/version/BrMacCath.mdsvex-draft-manager.svg)](https://marketplace.visualstudio.com/items?itemName=BrMacCath.mdsvex-draft-manager)
 ## Purpose
 
 The point of this app is to be able to make drafts in markdown files and then transfer over what you wish into a mdsvex file semi automatically. This combines the practicalilty of markdown with the forrmat of mdsvex for sveltekit applications.
