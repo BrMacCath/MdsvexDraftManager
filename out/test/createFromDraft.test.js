@@ -41,6 +41,7 @@ const vscode = __importStar(require("vscode"));
 const assert = __importStar(require("assert"));
 const updateFrontmatter_1 = require("../functions/frontmatter/updateFrontmatter");
 const createDraft_1 = __importDefault(require("../functions/drafts/createDraft"));
+const createFromDraft_1 = require("../functions/drafts/createFromDraft");
 const origContent = String.raw `---
 draftNum: 2
 ---
@@ -74,6 +75,60 @@ draftNum: 3
 completeSection: "## Complete Second Draft"
 ---
 # Second Draft
+
++---+
+Test Here. Got to this point
+*---*
+This is the content for the first draft
+* 
+> This content is here for the second draft
+
+ We will see how it works out
+* 
+> We will see its effect here
+
++---+
+Is this taken here
+*---*
+I need a second paragraph to test things out
+* 
+> Lets see how the second paragraph is working
+
+ This will check the paragraph separating condition
+* 
+> Will the separating conditions work
+
+## Complete Second Draft
+
+This content is here for the second draft. We will see its effect here.
+
+Lets see how the second paragraph is working. Will the separating conditions work.
+
+# Third Draft
+
+Test Here. Got to this point
+
+*---*
+This content is here for the second draft
+* 
+> 
+
+We will see its effect here
+* 
+> 
+
++---+
+Is this taken here
+
+*---*
+Lets see how the second paragraph is working
+* 
+> 
+
+Will the separating conditions work
+* 
+> `;
+const newDraftNoFrontmatterWithTopicWithComments = String.raw `# Second Draft
 
 +---+
 Test Here. Got to this point
@@ -305,6 +360,7 @@ suite('Create draft function checks', () => {
             .update(keyHaveTopicFrontmatter, originalHaveTopicFrontmatter, vscode.ConfigurationTarget.Global);
         await config
             .update(keyHaveComments, originalHaveComments, vscode.ConfigurationTarget.Global);
+        await vscode.commands.executeCommand('workbench.action.closeAllEditors');
     });
     test("Frontmatter changed correctly", async () => {
         const doc = await vscode.workspace.openTextDocument({
@@ -330,7 +386,18 @@ suite('Create draft function checks', () => {
         const newDraft = (0, createDraft_1.default)(origContent);
         assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftWithTopicWithComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
     });
-    test("Check exeuting a command on a new Draft. Have Topic Frontmatter, have comments", async () => {
+    test("Check create from Draft function will make a new draft. Have Topic Frontmatter, have comments", async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ndraftNum: 2\n---',
+        });
+        await vscode.window.showTextDocument(doc);
+        await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
+        await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
+        const newDraft = (0, createFromDraft_1.createFromDraft)(origContent, 2);
+        assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftNoFrontmatterWithTopicWithComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
+    });
+    test("Check executing a command on a new Draft. Have Topic Frontmatter, have comments", async () => {
         const doc = await vscode.workspace.openTextDocument({
             language: 'markdown',
             content: origContent,
@@ -338,9 +405,20 @@ suite('Create draft function checks', () => {
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftWithTopicWithComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
+    });
+    test("Check create Draft will make a new draft. Have Topic Frontmatter, no comments", async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ndraftNum: 2\n---',
+        });
+        await vscode.window.showTextDocument(doc);
+        await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
+        await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
+        const newDraft = (0, createDraft_1.default)(origContent);
+        assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftWithTopicNoComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
     });
     test("Check create from Draft will make a new draft. Have Topic Frontmatter, no comments", async () => {
         const doc = await vscode.workspace.openTextDocument({
@@ -361,7 +439,7 @@ suite('Create draft function checks', () => {
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, true, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftWithTopicNoComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
     });
@@ -384,7 +462,7 @@ suite('Create draft function checks', () => {
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, true, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftNoTopicWithComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
     });
@@ -407,7 +485,7 @@ suite('Create draft function checks', () => {
         await vscode.window.showTextDocument(doc);
         await config.update(keyHaveTopicFrontmatter, false, vscode.ConfigurationTarget.Global);
         await config.update(keyHaveComments, false, vscode.ConfigurationTarget.Global);
-        await vscode.commands.executeCommand('markdown-draft-manager.updateMarkdownDraft');
+        await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
         const newDraft = doc.getText();
         assert.deepStrictEqual(newDraft.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }), newDraftNoTopicNoComments.trim().split('\n').map((t) => { return t.trim(); }).filter((t) => { return t !== ""; }));
     });

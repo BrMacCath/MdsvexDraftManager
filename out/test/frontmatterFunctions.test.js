@@ -35,15 +35,20 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const assert = __importStar(require("assert"));
+const vscode = __importStar(require("vscode"));
 const removeFrontMatter_1 = require("../functions/frontmatter/removeFrontMatter");
 const frontMatterConstants_1 = require("../constants/frontMatterConstants");
 const extractFrontMatter_1 = require("../functions/frontmatter/extractFrontMatter");
+const updateFrontmatter_1 = require("../functions/frontmatter/updateFrontmatter");
 // Tests how it removes frontmatter. Here is some test data
 suite('Test frontmatter functions', () => {
     const testFrontmatter = "---\ncomplete: false\ndraftNum: 4\n---\n";
     const testContent = "This is test content. This is here";
     const testFrontmatterArray = [true, [["complete", "false"], ['draftNum', '4']]];
     // Here we test the remove frontmatter functions.
+    teardown(async () => {
+        await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+    });
     test("removeFrontMatter removes frontmatter", () => {
         const testText = testFrontmatter + testContent;
         assert.strictEqual((0, removeFrontMatter_1.removeFrontMatter)(testText), testContent);
@@ -63,6 +68,49 @@ suite('Test frontmatter functions', () => {
     });
     test("extractFrontMatter fails file without frontmatter", () => {
         assert.deepStrictEqual((0, extractFrontMatter_1.extractFrontMatter)(testContent), failExtractFrontMatter);
+    });
+    test('no active editor returns ["", 0]', async () => {
+        await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+        assert.strictEqual(vscode.window.activeTextEditor, undefined);
+        assert.deepStrictEqual((0, updateFrontmatter_1.updateFrontmatter)(), ['', 0]);
+    });
+    test('empty editor that is not markdown returns ["", 0]', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'plaintext',
+            content: '',
+        });
+        await vscode.window.showTextDocument(doc);
+        assert.deepStrictEqual((0, updateFrontmatter_1.updateFrontmatter)(), ['', 0]);
+    });
+    test('empty markdown editor returns ["", 0]', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '',
+        });
+        await vscode.window.showTextDocument(doc);
+        assert.deepStrictEqual((0, updateFrontmatter_1.updateFrontmatter)(), ['', 0]);
+    });
+    test('uses CRLF when the document uses CRLF', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ndraftNum: 1\n---\nBody',
+        });
+        const editor = await vscode.window.showTextDocument(doc);
+        await editor.edit((eb) => eb.setEndOfLine(vscode.EndOfLine.CRLF));
+        assert.strictEqual(doc.eol, vscode.EndOfLine.CRLF);
+        const [frontMatter, oldDraftNum] = (0, updateFrontmatter_1.updateFrontmatter)();
+        assert.strictEqual(oldDraftNum, 1);
+        assert.ok(frontMatter.includes('\r\n'));
+        assert.ok(frontMatter.startsWith('---\r\n'));
+        assert.ok(frontMatter.endsWith('\r\n---'));
+    });
+    test('editor with frontmatter but no draftNum returns ["", 0]', async () => {
+        const doc = await vscode.workspace.openTextDocument({
+            language: 'markdown',
+            content: '---\ntitle: hello\n---',
+        });
+        await vscode.window.showTextDocument(doc);
+        assert.deepStrictEqual((0, updateFrontmatter_1.updateFrontmatter)(), ['', 0]);
     });
 });
 //# sourceMappingURL=frontmatterFunctions.test.js.map

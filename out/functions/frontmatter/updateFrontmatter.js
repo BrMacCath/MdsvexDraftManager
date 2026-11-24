@@ -63,7 +63,7 @@ function updateFrontmatter() {
     ydoc.set(completeSectionIndicator, (0, createCompleteDraftTitle_1.createCompleteDraftTitle)(draftNum));
     const fm = ydoc.toString().trimEnd();
     const eol = doc.eol === vscode.EndOfLine.CRLF ? "\r\n" : "\n";
-    const replacement = fm ? `---${eol}${fm}${eol}---` : "";
+    const replacement = `---${eol}${fm}${eol}---`;
     return [replacement, draftNum];
 }
 //# sourceMappingURL=updateFrontmatter.js.map

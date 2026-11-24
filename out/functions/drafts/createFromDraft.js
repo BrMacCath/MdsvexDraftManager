@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFromDraft = createFromDraft;
+const frontMatterConstants_1 = require("../../constants/frontMatterConstants");
 const splitParagraphsFrontMatter_1 = require("../paragraphs/splitParagraphsFrontMatter");
 const splitParagraphsNoFrontMatter_1 = require("../paragraphs/splitParagraphsNoFrontMatter");
 const stringifyNumber_1 = require("./stringifyNumber");
@@ -49,6 +50,12 @@ function createFromDraft(draft, draftNum) {
     const newLineSeperator = haveCommentLine ?
         "\n" + commentLineSignifier + " \n" + rewriteLineSignifier + " \n\n"
         : "\n" + rewriteLineSignifier + " \n\n";
+    // Remove frontmatter
+    if (draft.slice(0, 3) === frontMatterConstants_1.frontMatterIndicator) {
+        draft = draft.slice(3);
+        const frontmatterIndex = draft.indexOf(frontMatterConstants_1.frontMatterIndicator);
+        draft = draft.slice(frontmatterIndex + frontMatterConstants_1.frontMatterIndicator.length);
+    }
     // Select the content from the current draft.
     const currentDraftTitle = "# " + (0, stringifyNumber_1.stringifyNumber)(draftNum) + " Draft";
     const contentIndex = draft.indexOf(currentDraftTitle) + currentDraftTitle.length;
