@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
+import * as sinon from 'sinon';
 
 const COMMAND = 'mdsvex-draft-manager.useMdsvexTemplate'; // your command id
 const OUTPUT_NAME = '+page.svx';
@@ -93,5 +94,30 @@ suite('Use Mdsvex template command', () => {
     await runOn(OUTPUT_NAME);
 
     assert.strictEqual(await read(OUTPUT_NAME), 'original {{ nothing.md }}');
+  });
+  test('Gives a warning if the editor is closed',async()=>{
+      await vscode.commands.executeCommand('workbench.action.closeAllEditors');
+      const warn = sinon.stub(vscode.window, 'showWarningMessage');
+      try {
+          const result = await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
+          assert.strictEqual(result, undefined);
+          assert.ok(warn.calledOnceWith('No file is currently open.'));
+      } finally {
+          warn.restore();
+      }
+  });
+  test('Recognises not to run on non-svx files', async()=>{
+    write("test.txt", 'Sample Text here');
+
+    const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(path.join(dir, "test.txt")));
+    await vscode.window.showTextDocument(doc);
+    const info = sinon.stub(vscode.window, 'showInformationMessage');
+    try {
+        const result = await vscode.commands.executeCommand('mdsvex-draft-manager.updateMarkdownDraft');
+        assert.strictEqual(result, undefined);
+        assert.ok(info.calledOnceWith('The current file is not markdown or mdsvex.'));
+    } finally {
+        info.restore();
+    }
   });
 });
